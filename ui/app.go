@@ -17,11 +17,20 @@ const (
 	ReleaseView
 )
 
+const (
+	ModalWDInput FocusablePrimitives = iota
+	ModalCloseButton
+	ModalDownloadButton
+)
+
 type App struct {
 	app *tview.Application
 
-	focusables    []tview.Primitive
-	focusIndex    int
+	focusables      []tview.Primitive
+	focusIndex      int
+	modalFocusables []tview.Primitive
+	modalFocusIndex int
+
 	downloadList  map[utils.Asset][]string // FIXME: I mean, we're only using the key value.
 	isModalActive bool
 

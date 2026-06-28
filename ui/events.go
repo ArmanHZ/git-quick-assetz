@@ -10,26 +10,26 @@ import (
 	"github.com/rivo/tview"
 )
 
-func (a *App) focusNext() {
-	if len(a.focusables) == 0 {
+func (a *App) focusNext(focusables []tview.Primitive, focusIndex *int) {
+	if len(focusables) == 0 {
 		return
 	}
 
-	a.focusIndex = (a.focusIndex + 1) % len(a.focusables)
-	a.app.SetFocus(a.focusables[a.focusIndex])
+	*focusIndex = (*focusIndex + 1) % len(focusables)
+	a.app.SetFocus(focusables[*focusIndex])
 }
 
-func (a *App) focusPrev() {
-	if len(a.focusables) == 0 {
+func (a *App) focusPrev(focusables []tview.Primitive, focusIndex *int) {
+	if len(focusables) == 0 {
 		return
 	}
 
-	a.focusIndex--
-	if a.focusIndex < 0 {
-		a.focusIndex = len(a.focusables) - 1
+	*focusIndex--
+	if *focusIndex < 0 {
+		*focusIndex = len(focusables) - 1
 	}
 
-	a.app.SetFocus(a.focusables[a.focusIndex])
+	a.app.SetFocus(focusables[*focusIndex])
 }
 
 func (a *App) initInputCapture() {
@@ -37,11 +37,21 @@ func (a *App) initInputCapture() {
 		if !a.isModalActive {
 			switch event.Key() {
 			case tcell.KeyTab:
-				a.focusNext()
+				a.focusNext(a.focusables, &a.focusIndex)
 				return nil
 
 			case tcell.KeyBacktab:
-				a.focusPrev()
+				a.focusPrev(a.focusables, &a.focusIndex)
+				return nil
+			}
+		} else {
+			switch event.Key() {
+			case tcell.KeyTab:
+				a.focusNext(a.modalFocusables, &a.modalFocusIndex)
+				return nil
+
+			case tcell.KeyBacktab:
+				a.focusPrev(a.modalFocusables, &a.modalFocusIndex)
 				return nil
 			}
 		}
@@ -139,33 +149,8 @@ func (a *App) urlAction() {
 
 func (a *App) downloadButtonAction() {
 	a.downloadButton.SetSelectedFunc(func() {
-		a.isModalActive = true
-
-		var text string
-		if len(a.downloadList) == 0 {
-			text = "No assets selected."
-		} else {
-			text = "Selected assets:\n\n"
-
-			for _, asset := range a.downloadList {
-				text += fmt.Sprintf(
-					"%s\n%s\n\n",
-					asset[0],
-					asset[1],
-				)
-			}
-		}
-
-		modal := tview.NewModal().
-			SetText(text).
-			AddButtons([]string{"Download", "Cancel"}).
-			SetDoneFunc(func(buttonIndex int, buttonLabel string) {
-				if buttonLabel == "Cancel" {
-					a.app.SetRoot(a.mainGrid, true).SetFocus(a.focusables[a.focusIndex])
-					a.isModalActive = false
-				}
-			})
-		a.app.SetRoot(modal, false).SetFocus(modal)
+		modal := a.buildDownloadPage()
+		a.app.SetRoot(modal, true).SetFocus(modal)
 	})
 }
 
