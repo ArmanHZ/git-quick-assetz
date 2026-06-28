@@ -1,9 +1,9 @@
-# git-release-downloader
-A tool written in Go to download Git releases with ease.
+# Git Release Downloader
+A TUI [(tview)](https://github.com/rivo/tview) tool written in Go for downloading assets from git releases with ease.
 
 # Why?
 I needed a tool with a user-friendly UI to quickly download the latest releases of
-pentesting tools when solving CTF/HTB challenges, so I wrote this TUI tool.
+pentesting tools when working on CTF/HTB challenges, so I wrote this TUI tool.
 
 # Build and run
 As of now, you can't use `go get` to download this, but I will add this later.
