@@ -6,6 +6,8 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"os"
+	"path/filepath"
 )
 
 type Release struct {
@@ -73,4 +75,37 @@ func GetReleases(repoURL string) ([]Release, error) {
 	}
 
 	return releases, err
+}
+
+// URL list has file name and url info
+// TODO: Refactor with better names.
+func DownloadAssets(urlList [][]string, dir string) error {
+	if err := os.MkdirAll(dir, 0755); err != nil {
+		return err
+	}
+
+	for _, url := range urlList {
+		resp, err := http.Get(url[1])
+		if err != nil {
+			return err
+		}
+		defer resp.Body.Close()
+
+		filename := url[0]
+		dst := filepath.Join(dir, filename)
+
+		file, err := os.Create(dst)
+		if err != nil {
+			return err
+		}
+
+		_, err = io.Copy(file, resp.Body)
+		file.Close()
+
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }

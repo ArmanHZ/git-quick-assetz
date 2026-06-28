@@ -1,6 +1,7 @@
 package ui
 
 import (
+	"grd/utils"
 	"os"
 
 	"github.com/gdamore/tcell/v2"
@@ -31,8 +32,10 @@ func (a *App) buildDownloadPage() *tview.Frame {
 		SetSelectedBackgroundColor(tcell.ColorDefault).
 		SetSelectedTextColor(tcell.ColorWhite)
 
+	urlList := [][]string{}
 	for _, k := range a.downloadList {
 		downloadList.AddItem(k[0], k[1], 0, nil)
+		urlList = append(urlList, k)
 	}
 
 	closeModalButton := tview.NewButton("Cancel").
@@ -47,6 +50,28 @@ func (a *App) buildDownloadPage() *tview.Frame {
 			a.app.SetRoot(a.mainGrid, true).SetFocus(a.focusables[a.focusIndex])
 			a.isModalActive = false
 		})
+	downloadButton.SetSelectedFunc(func() {
+		modal := tview.NewModal().
+			SetText("Download started. Pop-up will close after the files are downloaded.")
+
+		a.app.SetRoot(modal, false)
+
+		go func() {
+			err := utils.DownloadAssets(urlList, fileSaveInput.GetText())
+
+			if err != nil {
+				panic(err)
+			}
+
+			a.app.SetRoot(a.mainGrid, true)
+			a.focusIndex = int(UrlInput)
+			a.app.SetFocus(a.focusables[a.focusIndex])
+			a.isModalActive = false
+
+			a.app.Draw()
+		}()
+
+	})
 	a.modalFocusables = append(a.modalFocusables, downloadButton)
 
 	grid.AddItem(fileSaveInput, 1, 1, 1, 2, 0, 0, true).
