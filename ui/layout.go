@@ -90,9 +90,7 @@ func (a *App) buildHeader() *tview.Frame {
 
 	a.urlInput = tview.NewInputField().
 		SetLabel("GitHub URL: ").
-		SetPlaceholder("https://github.com/owner/repo").
-		// TODO: Remove the debugging link
-		SetText("https://github.com/peass-ng/PEASS-ng")
+		SetPlaceholder("https://github.com/owner/repo")
 	a.focusables = append(a.focusables, a.urlInput)
 
 	a.downloadButton = tview.NewButton("Download Assets")
