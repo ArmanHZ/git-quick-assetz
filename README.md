@@ -44,7 +44,7 @@ After that, you can press the `Download Assets` button to see the assets that wi
 be downloaded and as well as the ability to define a directory where they will be
 downloaded to.
 
-![grd-3](./img/grd-4.png)
+![grd-4](./img/grd-4.png)
 
 By default, your current working directory will be shown in the `Save location`
 input field.
