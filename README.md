@@ -2,19 +2,23 @@
 A TUI [(tview)](https://github.com/rivo/tview) tool written in Go for downloading assets from git releases with ease.
 
 # Why?
-I needed a tool with a user-friendly UI to quickly download the latest releases of
-pentesting tools when working on CTF/HTB challenges, so I wrote this TUI tool.
+I needed a tool with a user-friendly UI to quickly hand pick and download specific assets from
+releases of tool repository when working on CTF/HTB challenges.
+
+___Note: `grd` only displays the non-default assets for each release. In other words, source `zip` and `tar.gz` files are not shown. This is intended behavior, because downloading them are no different to cloning the repository.___
 
 # Build and run
-As of now, you can't use `go get` to download this, but I will add this later.
+Install using `go` ($GOPATH must be in your environment variables in order to use `grd` from everywhere):
+
+```console
+go install github.com/ArmanHZ/git-release-downloader/cmd/grd@latest
+```
 
 To build and run, you can use the `build_and_run.sh` or manually as follows:
 
-```bash
+```console
 git clone https://github.com/ArmanHZ/git-release-downloader.git
-
 go build -o ./grd ./cmd/grd/grd.go
-
 ./grd
 ```
 
