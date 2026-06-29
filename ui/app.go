@@ -1,9 +1,8 @@
 package ui
 
 import (
-	"grd/utils"
+	"github.com/ArmanHZ/git-release-downloader/utils"
 
-	// "github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
 )
 

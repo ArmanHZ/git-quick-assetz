@@ -2,9 +2,10 @@ package ui
 
 import (
 	"fmt"
-	"grd/utils"
 	"log"
 	"time"
+
+	"github.com/ArmanHZ/git-release-downloader/utils"
 
 	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
@@ -136,12 +137,12 @@ func (a *App) urlAction() {
 			releases, err := utils.GetReleases(a.urlInput.GetText())
 			if err != nil {
 				// TODO: Pop-up saying error or something.
+			} else {
+				a.populateReleaseTree(releases)
+				// XXX
+				a.focusIndex = int(ReleaseView)
+				a.app.SetFocus(a.focusables[a.focusIndex])
 			}
-
-			a.populateReleaseTree(releases)
-			// XXX
-			a.focusIndex = int(ReleaseView)
-			a.app.SetFocus(a.focusables[a.focusIndex])
 		}
 	})
 

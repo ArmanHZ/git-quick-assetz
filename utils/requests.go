@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -47,7 +46,6 @@ type Asset struct {
 func GetReleases(repoURL string) ([]Release, error) {
 	ownerAndRepo, err := ExtractOwnerAndRepoNames(repoURL)
 	if err != nil {
-		log.Fatal(err)
 		return nil, err
 	}
 
@@ -55,14 +53,12 @@ func GetReleases(repoURL string) ([]Release, error) {
 
 	resp, err := http.Get(gitAPIReqURL)
 	if err != nil {
-		log.Fatal(err)
 		return nil, err
 	}
 	defer resp.Body.Close()
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		log.Fatal(err)
 		return nil, err
 	}
 
@@ -70,7 +66,6 @@ func GetReleases(repoURL string) ([]Release, error) {
 
 	err = json.Unmarshal(body, &releases)
 	if err != nil {
-		log.Fatal(err)
 		return nil, err
 	}
 
