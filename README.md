@@ -36,25 +36,14 @@ Everytime you pull the assets of a repo, the URL gets saved in this file: `$HOME
 
 This allows you to press `ctrl+f` when the __url input__ is in focus to quickly re-use the previously navigated repos.
 
+By default, your current working directory will be shown in the `Save location`
+input field.
+
+If you don't want to type the path manually, you can just launch `quaz` in the
+directory that you want to download the assets into.
+
 # Screenshots and functionalities
 With the default color scheme of `Windows Terminal`, the TUI app looks like this:
 
-![grd-1](./img/grd-1.png)
+![quaz-demo](./img/quaz-demo.gif)
 
-You can enter/paste a valid `GitHub` URL in the text box and press `enter` to pull
-all available releases:
-
-![grd-2](./img/grd-2.png)
-
-You can navigate to the release you want, expand it and select the files you want:
-
-![grd-3](./img/grd-3.png)
-
-After that, you can press the `Download Assets` button to see the assets that will
-be downloaded and as well as the ability to define a directory where they will be
-downloaded to.
-
-![grd-4](./img/grd-4.png)
-
-By default, your current working directory will be shown in the `Save location`
-input field.
