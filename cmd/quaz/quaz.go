@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/ArmanHZ/git-release-downloader/ui"
+	"github.com/ArmanHZ/git-quick-assetz/ui"
 )
 
 func main() {

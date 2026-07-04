@@ -1,4 +1,4 @@
-module github.com/ArmanHZ/git-release-downloader
+module github.com/ArmanHZ/git-quick-assetz
 
 go 1.26.2
 

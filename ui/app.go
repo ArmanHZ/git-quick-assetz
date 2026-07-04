@@ -4,7 +4,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/ArmanHZ/git-release-downloader/utils"
+	"github.com/ArmanHZ/git-quick-assetz/utils"
 
 	"github.com/rivo/tview"
 )
@@ -34,7 +34,7 @@ func initHistFilePath() string {
 		panic(err)
 	}
 
-	return filepath.Join(home, ".config", "grd", "hist.json")
+	return filepath.Join(home, ".config", "quaz", "hist.json")
 }
 
 func New() *App {

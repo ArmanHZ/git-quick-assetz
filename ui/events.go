@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/ArmanHZ/git-release-downloader/utils"
+	"github.com/ArmanHZ/git-quick-assetz/utils"
 
 	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
