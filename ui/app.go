@@ -1,17 +1,20 @@
 package ui
 
 import (
+	"os"
+	"path/filepath"
+
 	"github.com/ArmanHZ/git-release-downloader/utils"
 
 	"github.com/rivo/tview"
 )
 
 type App struct {
-	app *tview.Application
+	app          *tview.Application
+	histFilePath string
 
-	mainFocus *FocusManager
-	// TODO: impl l8r
-	// repoSelectFocus *FocusManager
+	mainFocus          *FocusManager
+	repoHistoryFocus   *FocusManager
 	downloadModalFocus *FocusManager
 
 	activeFocus *FocusManager
@@ -25,9 +28,19 @@ type App struct {
 	releaseView    *tview.TreeView
 }
 
+func initHistFilePath() string {
+	home, err := os.UserHomeDir()
+	if err != nil {
+		panic(err)
+	}
+
+	return filepath.Join(home, ".config", "grd", "hist.json")
+}
+
 func New() *App {
 	a := &App{
-		app: tview.NewApplication(),
+		app:          tview.NewApplication(),
+		histFilePath: initHistFilePath(),
 	}
 
 	a.buildUI()

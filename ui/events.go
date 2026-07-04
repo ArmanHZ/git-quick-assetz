@@ -102,8 +102,10 @@ func (a *App) urlAction() {
 		if key == tcell.KeyEnter {
 			releases, err := utils.GetReleases(a.urlInput.GetText())
 			if err != nil {
-				// TODO: Pop-up saying error or something.
+				err = fmt.Errorf("%w\n%s", err, "Url format: https://github.com/owner/repo")
+				a.displayErrorModal(err)
 			} else {
+				utils.AddNewURL(a.urlInput.GetText(), a.histFilePath)
 				a.populateReleaseTree(releases)
 				a.activeFocus.index = int(ReleaseView)
 				a.app.SetFocus(a.releaseView)
@@ -111,8 +113,20 @@ func (a *App) urlAction() {
 		}
 	})
 
+	a.urlInput.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
+		if event.Key() == tcell.KeyCtrlF {
+			repoHist := a.buildRepoHistoryPage()
+			a.app.SetRoot(repoHist, true)
+
+			return nil
+		}
+
+		return event
+	})
+
 }
 
+// TODO: Rename this. This is for the download button that leads you to the actual download page.
 func (a *App) downloadButtonAction() {
 	a.downloadButton.SetSelectedFunc(func() {
 		modal := a.buildDownloadPage()

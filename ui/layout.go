@@ -9,11 +9,25 @@ import (
 	"github.com/rivo/tview"
 )
 
+func (a *App) displayErrorModal(err error) {
+	modal := tview.NewModal().
+		SetText(err.Error()).
+		AddButtons([]string{"Ok"}).
+		SetDoneFunc(func(buttonIndex int, buttonLabel string) {
+			if buttonLabel == "Ok" {
+				a.app.SetRoot(a.mainGrid, true)
+			}
+		})
+
+	a.app.SetRoot(modal, false)
+}
+
 // XXX: Maybe some parts of this function need to go to the events. But, I don't
 // want to globalize more variables. We'll see.
 // We could call this once and then use the reference to eliminate the modal focusables reset.
 func (a *App) buildDownloadPage() *tview.Frame {
 	// Reset the focusables each time, because the modal can be created multiple times.
+	// ^ now that I think about it, only the download list changes, so this could be another struct or get its components defined in the `app.go` file.
 	a.downloadModalFocus = NewFocusManager()
 	a.activeFocus = a.downloadModalFocus
 
@@ -49,6 +63,10 @@ func (a *App) buildDownloadPage() *tview.Frame {
 
 	downloadButton := tview.NewButton("Download").
 		SetSelectedFunc(func() {
+			if len(urlList) == 0 {
+				return
+			}
+
 			modal := tview.NewModal().
 				SetText("Download started. Pop-up will close after the files are downloaded.")
 
@@ -58,7 +76,7 @@ func (a *App) buildDownloadPage() *tview.Frame {
 				err := utils.DownloadAssets(urlList, fileSaveInput.GetText())
 
 				if err != nil {
-					panic(err)
+					a.displayErrorModal(err)
 				}
 
 				// TODO: Reset the download list and the ReleaseView colors.
@@ -77,6 +95,56 @@ func (a *App) buildDownloadPage() *tview.Frame {
 		AddItem(downloadList, 1, 0, 1, 2, 0, 0, false).
 		AddItem(closeModalButton, 2, 0, 1, 1, 0, 0, true).
 		AddItem(downloadButton, 2, 1, 1, 1, 0, 0, true)
+
+	return tview.NewFrame(grid).SetBorders(1, 1, 0, 0, 2, 2)
+}
+
+// TODO: This function is long and ugly.
+func (a *App) buildRepoHistoryPage() *tview.Frame {
+	a.repoHistoryFocus = NewFocusManager()
+	a.activeFocus = a.repoHistoryFocus
+
+	grid := tview.NewGrid().
+		SetRows(1, 0).
+		SetColumns(0).
+		SetGap(2, 0)
+
+	urlHistory, err := utils.LoadURLHistory(a.histFilePath)
+	if err != nil {
+		panic(err)
+	}
+
+	urlList := tview.NewList()
+	urlList.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
+		switch {
+		case event.Key() == tcell.KeyRune && event.Rune() == 'j':
+			return tcell.NewEventKey(tcell.KeyDown, 0, tcell.ModNone)
+		case event.Key() == tcell.KeyRune && event.Rune() == 'k':
+			return tcell.NewEventKey(tcell.KeyUp, 0, tcell.ModNone)
+		}
+
+		return event
+	})
+	urlList.SetSelectedFunc(func(i int, s1, s2 string, r rune) {
+		if r != 'q' {
+			a.urlInput.SetText(s1)
+			a.activeFocus = a.mainFocus
+			a.app.SetRoot(a.mainGrid, true)
+		}
+	})
+
+	for _, v := range urlHistory {
+		urlList.AddItem(v, "", 0, nil)
+	}
+
+	urlList.AddItem("Back", "Press to return to the main page", 'q', func() {
+		a.activeFocus = a.mainFocus
+		a.app.SetRoot(a.mainGrid, true)
+	})
+	a.activeFocus.AddFocusable(urlList)
+
+	grid.AddItem(tview.NewTextView().SetDynamicColors(true).SetText("URL History [gray]Press q to return[white]"), 0, 0, 1, 1, 0, 0, false)
+	grid.AddItem(urlList, 1, 0, 1, 1, 0, 0, true)
 
 	return tview.NewFrame(grid).SetBorders(1, 1, 0, 0, 2, 2)
 }

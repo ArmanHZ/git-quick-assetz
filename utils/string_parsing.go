@@ -19,10 +19,6 @@ func ExtractOwnerAndRepoNames(repoURL string) (repo string, err error) {
 	return matches[1], nil
 }
 
-func GetAssetsFromRelease(release Release) []Asset {
-	return release.Assets
-}
-
 func AssetDigestSpaceCalc(assets []Asset) int {
 	maxNameLen := 0
 	for _, asset := range assets {
