@@ -17,7 +17,7 @@ go install github.com/ArmanHZ/git-quick-assetz/cmd/quaz@latest
 To build and run, you can use the `build_and_run.sh` or manually as follows:
 
 ```console
-git clone https://github.com/ArmanHZ/git-release-downloader.git
+git clone https://github.com/ArmanHZ/git-quick-assetz.git
 go build -o ./quaz ./cmd/quaz/quaz.go
 ./quaz
 ```
