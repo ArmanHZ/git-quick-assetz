@@ -26,9 +26,15 @@ If you want, you can move the `quaz` to somewhere that is in your path and use i
 from anywhere you want.
 
 # Usage
-The movement keys are `Tab` and `Shift+Tab`.
+The movement keys for switching componentgs, eg. buttons, are `Tab` and `Shift+Tab`.
+
+Moving within the components, eg. navigating through a list, `arrow keys` or `j/k` keys work.
 
 The action key is `Enter`.
+
+Everytime you pull the assets of a repo, the URL gets saved in this file: `$HOME/.config/quaz/hist.json`.
+
+This allows you to press `ctrl+f` when the __url input__ is in focus to quickly re-use the previously navigated repos.
 
 # Screenshots and functionalities
 With the default color scheme of `Windows Terminal`, the TUI app looks like this:
