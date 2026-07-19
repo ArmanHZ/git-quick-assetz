@@ -5,7 +5,8 @@ A TUI [(tview)](https://github.com/rivo/tview) tool written in Go for downloadin
 I needed a tool with a user-friendly UI to quickly hand pick and download specific assets from
 releases of tool repository when working on CTF/HTB challenges.
 
-___Note: `quaz` only displays the non-default assets for each release. In other words, source `zip` and `tar.gz` files are not shown. This is intended behavior, because downloading them are no different to cloning the repository.___
+> [!Note]
+> `quaz` only displays the non-default assets for each release. In other words, source `zip` and `tar.gz` files are not shown. This is intended behavior, because downloading them are no different to cloning the repository.
 
 # Build and run
 Install using `go` ($GOPATH must be in your environment variables in order to use `quaz` from everywhere):
